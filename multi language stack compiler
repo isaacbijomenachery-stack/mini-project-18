@@ -1,0 +1,210 @@
+JS code
+
+// Detect Language
+function detectLanguage(code) {
+    if (code.includes("#include") || code.includes("printf"))
+        return "C";
+    if (code.includes("cout") || code.includes("std::"))
+        return "CPP";
+    if (code.includes("System.out"))
+        return "Java";
+    if (code.includes("print("))
+        return "Python";
+    return "Unknown";
+}
+
+// Lexical Analyzer
+function lexicalAnalysis(code) {
+    return code.match(/[A-Za-z_]\w*|[0-9]+|[\(\){};=+\-*/]/g);
+}
+
+// Simple Syntax Checking
+function syntaxCheck(language, code) {
+    if (language === "C" && !code.includes("main"))
+        return "Error: C program must contain main().";
+
+    if (language === "CPP" && !code.includes("main"))
+        return "Error: C++ program must contain main().";
+
+    if (language === "Java" && !code.includes("class"))
+        return "Error: Java program must have a class.";
+
+    if (language === "Python" && !code.includes("print"))
+        return "Error: Python code must contain print().";
+
+    return "Syntax OK";
+}
+
+// IR Generator
+function generateIR(tokens) {
+    let ir = [];
+    tokens.forEach(t => {
+        if (/^[0-9]+$/.test(t)) ir.push("LOAD_CONST " + t);
+        else if (t === "=") ir.push("STORE_VAR");
+        else if (/^[A-Za-z_]\w*$/.test(t)) ir.push("IDENTIFIER " + t);
+    });
+    return ir;
+}
+
+// Execution Simulation
+function execute(language) {
+    switch (language) {
+        case "C": return "Executing: C Machine Code Simulation.";
+        case "CPP": return "Executing: C++ Object Code Simulation.";
+        case "Java": return "Executing: JVM Bytecode Simulation.";
+        case "Python": return "Executing: Python Bytecode Simulation.";
+        default: return "Cannot Execute.";
+    }
+}
+
+// MAIN FUNCTION
+function compileCode() {
+    const code = document.getElementById("codeInput").value;
+    const outputBox = document.getElementById("outputBox");
+
+    if (code.trim() === "") {
+        outputBox.textContent = "Please enter code!";
+        return;
+    }
+
+    let lang = detectLanguage(code);
+    let tokens = lexicalAnalysis(code) || [];
+    let syntax = syntaxCheck(lang, code);
+    let ir = generateIR(tokens);
+
+    let finalOutput =
+        `Detected Language: ${lang}\n\n` +
+        `Tokens: ${JSON.stringify(tokens)}\n\n` +
+        `Syntax Check: ${syntax}\n\n` +
+        `Intermediate Code:\n${ir.join("\n")}\n\n` +
+        execute(lang);
+
+    outputBox.textContent = finalOutput;
+}
+
+
+HTML code
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi-Language Compiler Stack Simulation</title>
+
+    <!-- FIX CSS NAME HERE -->
+    <link rel="stylesheet" href="skin.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Multi-Language Compiler Stack Simulation</h1>
+    </header>
+
+    <div class="container">
+
+        <textarea id="codeInput" placeholder="Type your code here..."></textarea>
+
+        <button onclick="compileCode()">Compile</button>
+        <button onclick="convertToC()">Convert to C</button>
+        <button onclick="convertToCPP()">Convert to C++</button>
+
+        <!-- Converted Code Section -->
+        <div class="output-section">
+            <h3>Converted Code</h3>
+            <pre id="convertOutput"></pre>
+        </div>
+
+        <!-- Compiler Output Section -->
+        <div class="output-section">
+            <h3>Output</h3>
+            <pre id="outputBox"></pre>
+        </div>
+
+    </div>
+
+    <!-- FIX JS NAME HERE -->
+    <script src="function.js"></script>
+
+</body>
+</html>
+
+
+CSS code
+
+/* Light Background */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f9fb;   /* (1) Extra light blue/white */
+    color: #000;           /* Black text */
+}
+
+/* Header */
+header {
+    background: #ffe8a3;   /* (2) Soft Cream Yellow */
+    padding: 20px;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    border-bottom: 3px solid #e0c96d;
+}
+
+/* Container */
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Textarea */
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    background: #ffffff;   /* (3) Pure White */
+    border: 2px solid #a8c5ff; /* (4) Light pastel blue border */
+    color: #000;
+    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px #dce6ff;
+}
+
+/* Buttons */
+button {
+    background: #d0e8ff;       /* (5) Very light sky blue */
+    color: #000;
+    padding: 12px 20px;
+    border: none;
+    margin-top: 15px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #9fc8ff;
+}
+
+button:hover {
+    background: #b9dbff;       /* (6) Slightly darker light blue */
+}
+
+/* Output Sections */
+.output-section {
+    margin-top: 25px;
+    background: #fff8e6;       /* (7) Light Beige yellow */
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #ffe1a6;
+}
+
+/* Output Text Boxes */
+pre {
+    background: #f2faff;       /* (8) Very pale ice-blue */
+    padding: 15px;
+    border-radius: 8px;
+    color: #000;               /* Black text for readability */
+    font-size: 15px;
+    border: 2px solid #c9e6ff; /* (9) Light border shade */
+    white-space: pre-wrap;
+}
