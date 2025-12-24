@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 10
+#define LANG_LEN 20
+
+char stack[MAX][LANG_LEN];
+int top = -1;
+
+/* Push a language into compiler stack */
+void push(char lang[]) {
+    if (top == MAX - 1) {
+        printf("Compiler Stack Overflow!\n");
+        return;
+    }
+    top++;
+    strcpy(stack[top], lang);
+    printf("Language '%s' added to compiler stack.\n", lang);
+}
+
+/* Pop a language from compiler stack */
+void pop() {
+    if (top == -1) {
+        printf("Compiler Stack Underflow!\n");
+        return;
+    }
+    printf("Language '%s' removed from compiler stack.\n", stack[top]);
+    top--;
+}
+
+/* Display compiler stack */
+void display() {
+    if (top == -1) {
+        printf("Compiler Stack is empty.\n");
+        return;
+    }
+    printf("\nCompiler Stack (Top to Bottom):\n");
+    for (int i = top; i >= 0; i--) {
+        printf("%s\n", stack[i]);
+    }
+}
+
+int main() {
+    int choice;
+    char language[LANG_LEN];
+
+    do {
+        printf("\n--- Multi-Language Compiler Stack ---\n");
+        printf("1. Push Language\n");
+        printf("2. Pop Language\n");
+        printf("3. Display Stack\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter language name: ");
+                scanf("%s", language);
+                push(language);
+                break;
+
+            case 2:
+                pop();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("Exiting Compiler Stack Simulation.\n");
+                break;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
